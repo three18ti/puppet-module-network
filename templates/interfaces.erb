@@ -13,15 +13,15 @@ auto <%= auto.join(" ") %>
 
 <% mappings.sort.each do |name_and_options| %>
 mapping <%= name_and_options[0] %>
-  script <%= name_and_options[1]["script"] %>
-  <%- name_and_options[1]["maps"].each do |value| -%>
+  script <%= name_and_options[1]['script'] %>
+  <%- name_and_options[1]['maps'].sort.each do |value| -%>
   map <%= value %>
   <%- end -%>
 <% end %>
 
-<% interfaces.each do |name_and_options| %>
-iface <%= name_and_options[0] %> inet <%= name_and_options[1]["method"] %>
-  <%- name_and_options[1].reject { |k, v| k == "method" }.sort.each do |option| -%>
+<% interfaces.sort_by {|key, value| value['order'].nil? ? "99-#{key}" : "#{value['order']}-#{key}" }.each do |name_and_options| %>
+iface <%= name_and_options[0] %> inet <%= name_and_options[1]['method'] %>
+  <%- name_and_options[1].reject { |k, v| k == 'method' or k == 'order' }.sort.each do |option| -%>
   <%= option[0] %> <%= option[1] %>
   <%- end -%>
 <% end %>
